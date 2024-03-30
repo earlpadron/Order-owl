@@ -13,17 +13,10 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
-public class OrderValidator {
-    private final ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
-    private final Validator validator = validatorFactory.getValidator();
-
-    public void validate(OrderDTO objectToValidate, String message){
-
-        Set<ConstraintViolation<OrderDTO>> violations = validator.validate(objectToValidate);
-        if(!violations.isEmpty()){
-            Set<String> errorMessages =  violations.stream()
-                    .map(ConstraintViolation::getMessage)
-                    .collect(Collectors.toSet());
+public class OrderValidator extends EntityValidator<OrderDTO>{
+    public void validate(OrderDTO orderDto, String message){
+        Set<String> errorMessages = super.validate(orderDto);
+        if(errorMessages != null){
             throw new CustomerCreateNotValidException(message, errorMessages);
         }
     }

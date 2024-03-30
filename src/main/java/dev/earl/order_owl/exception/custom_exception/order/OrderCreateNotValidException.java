@@ -1,4 +1,4 @@
-package dev.earl.order_owl.exception.order;
+package dev.earl.order_owl.exception.custom_exception.order;
 
 import java.util.Set;
 

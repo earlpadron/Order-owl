@@ -10,17 +10,17 @@ import lombok.NoArgsConstructor;
 
 import java.sql.Blob;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Entity
-public class ProductLine {
-
-    @Id
-    private String productLine;
-    private String textDescription;
-    private String htmlDescription;
-
-    @Lob
-    private byte[] image;//if Blob type is used, must use BlobProxy.generateProxy(<byte[]/InputStream)
-}
+//@Data
+//@NoArgsConstructor
+//@AllArgsConstructor
+//@Entity
+//public class ProductLine {
+//
+//    @Id
+//    private String productLine;
+//    private String textDescription;
+//    private String htmlDescription;
+//
+//    @Lob
+//    private byte[] image;//if Blob type is used, must use BlobProxy.generateProxy(<byte[]/InputStream)
+//}

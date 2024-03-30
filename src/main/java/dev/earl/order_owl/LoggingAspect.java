@@ -15,7 +15,17 @@ public class LoggingAspect {
     private static final Log LOGGER = LogFactory.getLog(LoggingAspect.class);
 
     @AfterThrowing(pointcut = "execution( * dev.earl.order_owl.service.CustomerService.*(..))", throwing = "exception")
-    public void logServiceException(RuntimeException exception){
+    public void logCustomerServiceException(RuntimeException exception){
         LOGGER.error(exception.getMessage(), exception);
+    }
+
+    @AfterThrowing(pointcut = "execution(* dev.earl.order_owl.service.OrderService.*(..))", throwing ="exception")
+    public void logOrderServiceException(RuntimeException exception){
+        LOGGER.error(exception.getMessage(), exception);
+    }
+
+    @AfterThrowing(pointcut = "execution(* dev.earl.order_owl.service.ProductService.*(..))", throwing="exception")
+    public void logProductServiceException(RuntimeException exception){
+        LOGGER.error(exception.getMessage(),exception);
     }
 }

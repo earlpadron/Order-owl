@@ -7,8 +7,7 @@ import jakarta.validation.constraints.NotEmpty;
 
 public record CustomerDTO(
     @NotEmpty(message = "{customer.name.not.empty}")
-    @JsonProperty(value = "name")
-    String customerName,
+    String name,
 
     @NotEmpty(message = "{customer.email.not.empty}")
     @Email

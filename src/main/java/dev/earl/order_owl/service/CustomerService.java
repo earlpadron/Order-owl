@@ -60,9 +60,9 @@ public class CustomerService {
 
     public CustomerDTO createCustomer(CustomerDTO customerDTO) throws CustomerAlreadyExistsException, CustomerCreateNotValidException {
         //first validate the DTO being sent in
-        validator.validate(customerDTO,"Invalid fields on customer creation" );
+        validator.validate(customerDTO, "Invalid fields of new customer") ;
         //check if this customer already exists
-        if(repository.findByCustomerNameIgnoreCase(customerDTO.customerName()) == null){
+        if(repository.findByNameIgnoreCase(customerDTO.name()) == null){
             Customer customer= mapper.customerDTOToCustomer(customerDTO);
             repository.save(customer);
         } else {
@@ -75,18 +75,8 @@ public class CustomerService {
         validator.validate(updateCustomerDTO, "Invalid updated fields on customer");
         Customer customerToBeUpdated = repository.findById(id)
                 .orElseThrow(() -> new CustomerNotFoundException(environment.getProperty("service.customer.not.found")));
-
-//            Customer updatedCustomer = Customer.builder()
-//                    .customerNumber(customerToBeUpdated.getCustomerNumber())
-//                    .phone(updateCustomerDTO.phone())
-//                    .customerName(updateCustomerDTO.customerName())
-//                    .contactFirstName(updateCustomerDTO.contactFirstName())
-//                    .contactLastName(updateCustomerDTO.contactLastName())
-//                    .address(updateCustomerDTO.address())
-//                    .creditLimit(updateCustomerDTO.creditLimit())
-//                    .build();
 ///         instead of creating a whole new customer, should only be updating
-            customerToBeUpdated.setCustomerName(updateCustomerDTO.customerName());
+            customerToBeUpdated.setName(updateCustomerDTO.name());
             customerToBeUpdated.setAddress(updateCustomerDTO.address());
             customerToBeUpdated.setCreditLimit(updateCustomerDTO.creditLimit());
             customerToBeUpdated.setPhone(updateCustomerDTO.phone());
@@ -97,7 +87,7 @@ public class CustomerService {
     }
 
    public void deleteCustomer(Integer id) throws CustomerNotFoundException{
-        if(repository.findById(id).isEmpty()){
+        if(!repository.existsById(id)){
             throw new CustomerNotFoundException(environment.getProperty("service.customer.not.found"));
         }
        repository.deleteById(id);

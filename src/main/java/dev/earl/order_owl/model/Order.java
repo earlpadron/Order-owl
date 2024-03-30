@@ -8,6 +8,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -15,13 +16,14 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@SuperBuilder
 @Entity
 @Table(name = "_order")
 public class Order {
 
     @Id
     @GeneratedValue
-    private Integer orderNumber;
+    private Integer orderId;
     @NotNull
     @FutureOrPresent
     private LocalDate orderDate;

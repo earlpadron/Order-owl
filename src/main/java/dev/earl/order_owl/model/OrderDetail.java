@@ -18,7 +18,6 @@ public class OrderDetail{
     private OrderDetailId orderDetailId;
     private int quantityOrdered;
     private float priceEach;
-    private int orderLineNumber;
 
     @ManyToOne
     @MapsId(value = "orderNumber")

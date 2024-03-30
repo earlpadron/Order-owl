@@ -12,19 +12,18 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
-public class CustomerValidator{
+public class CustomerValidator extends EntityValidator<CustomerDTO>{
 
-    private final ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
-    private final Validator validator = validatorFactory.getValidator();
+      public void validate(CustomerDTO customerDto, String message){
+          Set<String> errorMessages = super.validate(customerDto);
+          if(errorMessages != null){
+              throw new CustomerCreateNotValidException(message, errorMessages);
+          }
+      }
 
-    public void validate(CustomerDTO objectToValidate, String message){
 
-        Set<ConstraintViolation<CustomerDTO>> violations = validator.validate(objectToValidate);
-         if(!violations.isEmpty()){
-             Set<String> errorMessages =  violations.stream()
-                     .map(ConstraintViolation::getMessage)
-                     .collect(Collectors.toSet());
-             throw new CustomerCreateNotValidException(message, errorMessages);
-         }
-    }
+
+
+
+
 }

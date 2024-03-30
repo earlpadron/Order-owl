@@ -24,10 +24,10 @@ public class Customer {
 
     @Id
     @GeneratedValue
-    private Integer customerNumber;
+    private Integer customerId;
 
-    @NotEmpty(message = "{customer.name.invalid}")
-    private String customerName;
+    @NotEmpty(message = "{customer.name.not.empty}")
+    private String name;
 
     @NotEmpty(message = "{customer.email.not.empty}")
     @Email

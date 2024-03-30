@@ -1,9 +1,6 @@
 package dev.earl.order_owl.service;
 
-import dev.earl.order_owl.exception.order.OrderAlreadyExistsException;
-import dev.earl.order_owl.exception.order.OrderCreateNotValidException;
-import dev.earl.order_owl.exception.order.OrderListEmptyException;
-import dev.earl.order_owl.exception.order.OrderNotFoundException;
+import dev.earl.order_owl.exception.custom_exception.order.*;
 import dev.earl.order_owl.model.Order;
 import dev.earl.order_owl.model.dto.OrderDTO;
 import dev.earl.order_owl.repository.OrderRepository;
@@ -50,11 +47,36 @@ public class OrderService {
     //create
     public OrderDTO postOrder(OrderDTO newOrder) throws OrderAlreadyExistsException, OrderCreateNotValidException {
         orderValidator.validate(newOrder, "Invalid fields on order creation");
-        return null;
+        //check if it already exists
+        Order order = orderMapper.orderDTOToOrder(newOrder);
+        orderRepository.save(order);
+
+        return newOrder;
     }
 
-
     //update
+    public OrderDTO updateOrder(Integer id, OrderDTO updateOrder) throws OrderNotFoundException, OrderUpdateNotValidException {
+        orderValidator.validate(updateOrder, "Invalid updated fields of the order");
+        Order orderToUpdate = orderRepository.findById(id)
+                .orElseThrow(() -> new OrderNotFoundException(environment.getProperty("service.order.not.found")));
+
+        orderToUpdate.setOrderDate(updateOrder.orderDate());
+        orderToUpdate.setShippedDate(updateOrder.shippedDate());
+        orderToUpdate.setText(updateOrder.text());
+        orderToUpdate.setCustomer(updateOrder.customer());
+        orderToUpdate.setProductList(updateOrder.productList());
+        orderToUpdate.setStatus(updateOrder.status());
+
+        orderRepository.save(orderToUpdate);
+        return updateOrder;
+
+    }
 
     //delete
+    public void deleteOrder(Integer id) throws OrderNotFoundException {
+        if(!orderRepository.existsById(id)){
+            throw new OrderNotFoundException(environment.getProperty("{service.order.not.found}"));
+        }
+        orderRepository.deleteById(id);
+    }
 }
