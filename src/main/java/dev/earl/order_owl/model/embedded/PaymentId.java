@@ -14,5 +14,5 @@ import java.io.Serializable;
 public class PaymentId implements Serializable{
 
     private Integer customerId;
-    private String checkNumber;
+    private String cardNumber;
 }

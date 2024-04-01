@@ -43,5 +43,8 @@ public class Customer {
     @JsonManagedReference
     private List<Shipment> shipmentList;
 
+    @OneToOne(mappedBy = "customer")
+    private Cart cart;
+
 
 }
