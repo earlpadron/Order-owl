@@ -1,6 +1,7 @@
 package dev.earl.order_owl.exception;
 
 import dev.earl.order_owl.exception.custom_exception.customer.*;
+import dev.earl.order_owl.exception.custom_exception.shipment.ShipmentConstraintViolationException;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,16 +13,21 @@ import java.time.LocalDateTime;
 @RestControllerAdvice
 public class ExceptionControllerAdvice {
 
+    /**
+     * TODO :
+     *  Include a logger to log exceptions that occur at controller level as well?
+     *
+     */
 
     @ExceptionHandler(CustomerNotFoundException.class)
     public ResponseEntity<ErrorInfo> customerNotFoundExceptionHandler(CustomerNotFoundException exception){
         ErrorInfo errorInfo = new ErrorInfo(
                 exception.getMessage(),
-                HttpStatus.BAD_REQUEST.value(),
+                HttpStatus.NOT_FOUND.value(),
                 LocalDateTime.now()
         );
 
-        return new ResponseEntity<>(errorInfo, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(errorInfo, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(CustomerAlreadyExistsException.class)
@@ -38,10 +44,10 @@ public class ExceptionControllerAdvice {
     public ResponseEntity<ErrorInfo> customerListEmptyExceptionHandler(CustomerListEmptyException exception){
         ErrorInfo errorInfo = new ErrorInfo(
                 exception.getMessage(),
-                HttpStatus.BAD_REQUEST.value(),
+                HttpStatus.NOT_FOUND.value(),
                 LocalDateTime.now()
         );
-        return new ResponseEntity<>(errorInfo, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(errorInfo, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
@@ -71,6 +77,21 @@ public class ExceptionControllerAdvice {
     }
     @ExceptionHandler(CustomerUpdateNotValidException.class)
     public ResponseEntity<?> customerCreationNotValidException(CustomerUpdateNotValidException exception){
+
+        StringBuilder errorMessages = new StringBuilder();
+        exception.getErrorMessages().forEach(message -> errorMessages.append(message).append(", "));
+
+        ErrorInfo errorInfo = new ErrorInfo(
+                errorMessages.substring(0, errorMessages.length() - 2),
+                HttpStatus.BAD_REQUEST.value(),
+                LocalDateTime.now()
+        );
+
+        return new ResponseEntity<>(errorInfo, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ShipmentConstraintViolationException.class)
+    public ResponseEntity<ErrorInfo> shipmentConstraintViolationExceptionHandler(ShipmentConstraintViolationException exception){
 
         StringBuilder errorMessages = new StringBuilder();
         exception.getErrorMessages().forEach(message -> errorMessages.append(message).append(", "));

@@ -30,23 +30,18 @@ public class Customer {
     private String name;
 
     @NotEmpty(message = "{customer.email.not.empty}")
-    @Email
+    @Email(message = "{customer.email.invalid}")
     private String email;
 
     private String phone;
-    @Min(value = 0)
-    private double creditLimit;
 
     @Embedded
     @Valid
     private Address address;
 
-//
-//    @ManyToOne
-//    @JoinColumn(name = "employee_id")
-//    private Employee employee;
-//
-//    @OneToMany(mappedBy = "customer")
-//    @JsonManagedReference
-//    private List<Payment> payment; //attempting bi-directional relationship with Payment but is causing : LazyInitializationException
+    @OneToMany(mappedBy = "customer")
+    @JsonManagedReference
+    private List<Shipment> shipmentList;
+
+
 }

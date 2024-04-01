@@ -28,4 +28,9 @@ public class LoggingAspect {
     public void logProductServiceException(RuntimeException exception){
         LOGGER.error(exception.getMessage(),exception);
     }
+
+    @AfterThrowing(pointcut = "execution(* dev.earl.order_owl.service.ShipmentService.*(..))", throwing = "exception")
+    public void logShipmentServiceException(RuntimeException exception){
+        LOGGER.error(exception.getMessage(), exception);
+    }
 }

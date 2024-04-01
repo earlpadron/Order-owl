@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -21,15 +23,9 @@ public class Product {
     private double price;
     private String description;
     private String image;
-    private int quantityInStock;
+    private int stock;
 
-
-//    @ManyToOne
-//    @JoinColumn(name = "product_id")
-//    private ProductLine productLine;
-
-    @ManyToOne
-    @JoinColumn(name = "order_id")
-    private Order order;
+    @OneToMany(mappedBy = "product")
+    private List<OrderDetail> orderDetailList;
 
 }

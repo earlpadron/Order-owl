@@ -24,7 +24,7 @@ public class Payment{
     private double amount;
 
     @ManyToOne
-    @MapsId("customerNumber") //this specifies the attribute in the composite primary key to which the relationship attribute corresponds to
+    @MapsId("customerId") //this specifies the attribute in the composite primary key to which the relationship attribute corresponds to
     @JoinColumn(name = "customer_id") //Unidirectional relationship with Customer(Actually don't need @JoinColumn but can specify a name)
     //@JsonBackReference
     private Customer customer;

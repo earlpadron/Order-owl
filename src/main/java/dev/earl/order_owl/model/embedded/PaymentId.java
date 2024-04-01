@@ -13,6 +13,6 @@ import java.io.Serializable;
 @Embeddable
 public class PaymentId implements Serializable{
 
-    private Integer customerNumber;
+    private Integer customerId;
     private String checkNumber;
 }

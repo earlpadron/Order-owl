@@ -16,15 +16,15 @@ import java.io.Serializable;
 @Embeddable
 public class Address implements Serializable {
 
-    @NotEmpty
+    @NotEmpty(message = "{address.line.not.empty}")
     private String addressLine1;
     private String addressLine2;
-    @NotEmpty
+    @NotEmpty(message = "{address.city.not.empty}")
     private String city;
-    @NotEmpty
+    @NotEmpty(message = "{address.state.not.empty}")
     private String state;
-    @NotEmpty
+    @NotEmpty(message = "{address.country.not.empty}")
     private String country;
-    @NotEmpty
+    @NotEmpty(message = "{address.postalCode.not.empty}")
     private String postalCode;
 }

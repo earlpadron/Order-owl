@@ -47,32 +47,28 @@ public class OrderService {
     //create
     public OrderDTO postOrder(OrderDTO newOrder) throws OrderAlreadyExistsException, OrderCreateNotValidException {
         orderValidator.validate(newOrder, "Invalid fields on order creation");
-        //check if it already exists
+        //TODO check if it already exists
         Order order = orderMapper.orderDTOToOrder(newOrder);
         orderRepository.save(order);
 
         return newOrder;
     }
 
-    //update
+
     public OrderDTO updateOrder(Integer id, OrderDTO updateOrder) throws OrderNotFoundException, OrderUpdateNotValidException {
         orderValidator.validate(updateOrder, "Invalid updated fields of the order");
         Order orderToUpdate = orderRepository.findById(id)
                 .orElseThrow(() -> new OrderNotFoundException(environment.getProperty("service.order.not.found")));
 
         orderToUpdate.setOrderDate(updateOrder.orderDate());
-        orderToUpdate.setShippedDate(updateOrder.shippedDate());
         orderToUpdate.setText(updateOrder.text());
         orderToUpdate.setCustomer(updateOrder.customer());
-        orderToUpdate.setProductList(updateOrder.productList());
-        orderToUpdate.setStatus(updateOrder.status());
 
         orderRepository.save(orderToUpdate);
         return updateOrder;
 
     }
 
-    //delete
     public void deleteOrder(Integer id) throws OrderNotFoundException {
         if(!orderRepository.existsById(id)){
             throw new OrderNotFoundException(environment.getProperty("{service.order.not.found}"));

@@ -75,10 +75,8 @@ public class CustomerService {
         validator.validate(updateCustomerDTO, "Invalid updated fields on customer");
         Customer customerToBeUpdated = repository.findById(id)
                 .orElseThrow(() -> new CustomerNotFoundException(environment.getProperty("service.customer.not.found")));
-///         instead of creating a whole new customer, should only be updating
             customerToBeUpdated.setName(updateCustomerDTO.name());
             customerToBeUpdated.setAddress(updateCustomerDTO.address());
-            customerToBeUpdated.setCreditLimit(updateCustomerDTO.creditLimit());
             customerToBeUpdated.setPhone(updateCustomerDTO.phone());
             repository.save(customerToBeUpdated);
 

@@ -13,13 +13,10 @@ public record OrderDTO(
                         @NotNull
                         @FutureOrPresent
                         LocalDate orderDate,
-                        @NotNull
-                        @FutureOrPresent
-                        LocalDate shippedDate,
+
                         @NotNull
                         String text,
-                        Status status,
-                        List<Product> productList,
+
                         @NotNull
                         Customer customer) {
 }

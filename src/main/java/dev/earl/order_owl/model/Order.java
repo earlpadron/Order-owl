@@ -24,22 +24,16 @@ public class Order {
     @Id
     @GeneratedValue
     private Integer orderId;
-    @NotNull
-    @FutureOrPresent
+
+    @NotNull(message = "{order.date.not.null}")
+    @FutureOrPresent(message = "{order.date.not.valid}")
     private LocalDate orderDate;
-    @NotNull
-    @FutureOrPresent
-    private LocalDate shippedDate;
 
-    @NotNull
+    @NotNull(message = "{order.text.not.null}")
     private String text;
-    private Status status; //AttributeConverter automatically converts the type from : Entity <-> DB column representation
 
-    @OneToMany(mappedBy = "order")
-    private List<Product> productList;
-
-    @NotNull
+    @NotNull(message = "{order.customer.not.null}")
     @ManyToOne
-    @JoinColumn(name = "customer_number")
+    @JoinColumn(name = "customer_id")
     private Customer customer;
 }

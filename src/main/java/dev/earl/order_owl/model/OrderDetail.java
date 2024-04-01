@@ -1,12 +1,10 @@
 package dev.earl.order_owl.model;
 
-import dev.earl.order_owl.model.embedded.OrderDetailId;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.io.Serializable;
 
 @Data
 @NoArgsConstructor
@@ -14,13 +12,19 @@ import java.io.Serializable;
 @Entity
 public class OrderDetail{
 
-    @EmbeddedId
-    private OrderDetailId orderDetailId;
-    private int quantityOrdered;
+    @Id
+    @GeneratedValue
+    private Integer orderDetailId;
+    @Min(0)
+    private int quantity;
     private float priceEach;
 
     @ManyToOne
-    @MapsId(value = "orderNumber")
+    //@MapsId(value = "orderId") this lets spring know the embedded id is the foreign key column
     @JoinColumn(name = "order_id")
     private Order order;
+
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private Product product;
 }

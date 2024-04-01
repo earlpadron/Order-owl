@@ -3,6 +3,7 @@ package dev.earl.order_owl.controller;
 import dev.earl.order_owl.exception.custom_exception.customer.*;
 import dev.earl.order_owl.model.dto.CustomerDTO;
 import dev.earl.order_owl.service.CustomerService;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
