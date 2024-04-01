@@ -1,6 +1,7 @@
 package dev.earl.order_owl.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -43,6 +44,7 @@ public class Cart {
     @MapKeyJoinColumn(name = "product_id", referencedColumnName = "productId")
     private Map<Product, Integer> productToQuantity;
     private double subtotal;
+    @Min(value = 0, message = "{cart.invalid.quantity}")
     private int numberOfItems;
 
 
