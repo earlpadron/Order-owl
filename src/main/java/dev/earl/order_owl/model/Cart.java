@@ -34,8 +34,13 @@ public class Cart {
     @MapsId //read about this further https://vladmihalcea.com/the-best-way-to-map-a-onetoone-relationship-with-jpa-and-hibernate/
     private Customer customer;
 
-//    @CollectionTable
-//    @MapKey
+
+    //@OneToMany
+    @ElementCollection
+    @CollectionTable(name = "product_to_quantity",
+                     joinColumns = @JoinColumn(name ="product"))
+    @Column(name = "quantity_of_product")
+    @MapKeyJoinColumn(name = "product_id", referencedColumnName = "productId")
     private Map<Product, Integer> productToQuantity;
     private double subtotal;
     private int numberOfItems;
