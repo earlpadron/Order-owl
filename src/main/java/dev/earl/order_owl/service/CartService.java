@@ -76,6 +76,7 @@ public class CartService {
     public Cart updateProductsInCart(Integer id, Map<Product, Integer> productToQuantity)
             throws CartNotFoundException, CartConstraintViolationException, CartInvalidQuantityException {
 
+
         //search for cart if it exists
         Cart cartToUpdate = cartRepository.findById(id)
                 .orElseThrow(() -> new CartNotFoundException(environment.getProperty("service.cart.not.found")));

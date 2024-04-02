@@ -38,11 +38,12 @@ public class Cart {
 
     //@OneToMany
     @ElementCollection
-    @CollectionTable(name = "product_to_quantity",
-                     joinColumns = @JoinColumn(name ="product"))
+//    @CollectionTable(name = "product_to_quantity",
+//                     joinColumns = @JoinColumn(name ="product_name"))
     @Column(name = "quantity_of_product")
     @MapKeyJoinColumn(name = "product_id", referencedColumnName = "productId")
     private Map<Product, Integer> productToQuantity;
+
     private double subtotal;
     @Min(value = 0, message = "{cart.invalid.quantity}")
     private int numberOfItems;

@@ -23,17 +23,17 @@ public class Product {
     private String title;
     @NotEmpty
     private String category;
-    @NotEmpty
-    @Column(columnDefinition = "Decimal(10,2) default '0.00'")
+
+    //@Column(columnDefinition = "Decimal(10,2) default '0.00'")
     private double price;
     @NotEmpty
     private String description;
     @NotEmpty
     private String image;
-    @NotEmpty
     private int stock;
 
-    @OneToMany(mappedBy = "product")
-    private List<OrderDetail> orderDetailList;
+//
+//    @OneToMany(mappedBy = "product")
+//    private List<OrderDetail> orderDetailList;
 
 }

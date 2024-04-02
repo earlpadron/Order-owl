@@ -2,18 +2,15 @@ package dev.earl.order_owl;
 
 import com.github.javafaker.Faker;
 import dev.earl.order_owl.controller.ProductController;
-import dev.earl.order_owl.model.Customer;
-import dev.earl.order_owl.model.Order;
-import dev.earl.order_owl.model.Shipment;
+import dev.earl.order_owl.model.*;
 import dev.earl.order_owl.model.converter.Status;
 import dev.earl.order_owl.model.embedded.Address;
 import dev.earl.order_owl.post.PostGeneratedService;
-import dev.earl.order_owl.repository.CustomerRepository;
-import dev.earl.order_owl.repository.OrderRepository;
-import dev.earl.order_owl.repository.PaymentRepository;
-import dev.earl.order_owl.repository.ShipmentRepository;
+import dev.earl.order_owl.repository.*;
+import dev.earl.order_owl.service.CustomerService;
 import dev.earl.order_owl.service.ProductService;
 import dev.earl.order_owl.service.ShipmentService;
+import dev.earl.order_owl.service.mapper.CustomerMapper;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -24,6 +21,8 @@ import org.springframework.web.service.invoker.HttpServiceProxyFactory;
 
 import java.time.Duration;
 import java.time.LocalDate;
+import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
 
@@ -36,13 +35,17 @@ public class OrderOwlApplication {
 
 	@Bean
 	public CommandLineRunner commandLineRunner(CustomerRepository customerRepository,
+											   CustomerService customerService,
+											   CustomerMapper customerMapper,
 											   PaymentRepository paymentRepository,
 											   OrderRepository orderRepository,
 											   ProductService productService,
-											   ShipmentRepository shipmentRepository) {
+											   ShipmentRepository shipmentRepository,
+											   CartRepository cartRepository) {
 		return args -> {
+			productService.fillDbWithProducts();
 			Faker faker = new Faker();
-			for (int i = 0; i < 100; i++) {
+			for (int i = 0; i < 20; i++) {
 				Address address = Address.builder()
 						.addressLine1(faker.address().streetAddress())
 						.addressLine2(faker.address().streetAddress())
@@ -52,14 +55,14 @@ public class OrderOwlApplication {
 						.postalCode(faker.address().zipCode())
 						.build();
 
+
 				Customer customer = Customer.builder()
 						.address(address)
 						.email(faker.name().firstName() + "@mail.com")
 						.phone(faker.phoneNumber().cellPhone())
 						.name(faker.name().fullName())
-
 						.build();
-				customerRepository.save(customer);
+				Customer savedCustomer = customerRepository.save(customer);
 
 				Order order = Order.builder()
 						.orderDate(LocalDate.now())
@@ -76,8 +79,33 @@ public class OrderOwlApplication {
 						.build();
 				shipmentRepository.save(shipment);
 
-			}
-			productService.fillDbWithProducts();
+//				List<Shipment> shipmentList = new ArrayList<>();
+//				shipmentList.add(shipment);
+//
+//				customer.setShipmentList(shipmentList);
+//				customerRepository.save(customer);
+//				Random random = new Random();
+//				Map<Product, Integer> productToQuantity = new HashMap<>();
+//				for(int j = 0; j < 5; j++){
+//					Product product = productService.getProduct(random.nextInt(20) + 1);
+//					productToQuantity.put(product, random.nextInt(100) + 1);
+//				}
+//				int ranInt = random.nextInt(20) + 1;
+//				Customer customer = customerService.getCustomerEntity(ranInt);
+//				Cart cart = Cart.builder()
+//						//.customer(customerMapper.customerDTOToCustomer(customerService.getCustomer(1)))
+//						.customer(customerService.getCustomerEntity(ranInt))
+//						.numberOfItems(productToQuantity.size())
+//						.subtotal(random.nextInt(100) + 1)
+//						.productToQuantity(productToQuantity)
+//						.build();
+//				cartRepository.save(cart);
+//
+//
+		    }
+
+
+
 
 		};
 	}

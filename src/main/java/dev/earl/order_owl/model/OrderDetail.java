@@ -20,7 +20,6 @@ public class OrderDetail{
     private float priceEach;
 
     @ManyToOne
-    //@MapsId(value = "orderId") this lets spring know the embedded id is the foreign key column
     @JoinColumn(name = "order_id")
     private Order order;
 
