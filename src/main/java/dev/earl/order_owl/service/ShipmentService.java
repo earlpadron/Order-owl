@@ -9,6 +9,7 @@ import dev.earl.order_owl.repository.ShipmentRepository;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
+@PropertySource(value = "classpath:exceptionMessages.properties")
 public class ShipmentService {
 
     private final ShipmentRepository shipmentRepository;

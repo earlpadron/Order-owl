@@ -10,6 +10,7 @@ import dev.earl.order_owl.repository.ProductRepository;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.env.Environment;
 import org.springframework.http.MediaType;
@@ -22,6 +23,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
+@PropertySource(value = "classpath:exceptionMessages.properties")
 public class ProductService {
 
     private final RestClient restClient;

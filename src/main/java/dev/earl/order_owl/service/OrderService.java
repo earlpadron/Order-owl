@@ -7,6 +7,7 @@ import dev.earl.order_owl.repository.OrderRepository;
 import dev.earl.order_owl.service.mapper.OrderMapper;
 import dev.earl.order_owl.service.validator.OrderValidator;
 import jakarta.transaction.Transactional;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
+@PropertySource(value = "classpath:exceptionMessages.properties")
 public class OrderService {
 
     private final OrderRepository orderRepository;

@@ -1,5 +1,6 @@
 package dev.earl.order_owl.controller;
 
+import dev.earl.order_owl.exception.custom_exception.cart.CartAlreadyExistsException;
 import dev.earl.order_owl.exception.custom_exception.cart.CartConstraintViolationException;
 import dev.earl.order_owl.exception.custom_exception.cart.CartInvalidQuantityException;
 import dev.earl.order_owl.exception.custom_exception.cart.CartNotFoundException;
@@ -30,6 +31,14 @@ public class CartController {
         Cart cart = cartService.getCart(id);
         return new ResponseEntity<>(cart, HttpStatus.OK);
     }
+
+    @PostMapping
+    public ResponseEntity<Cart> createCart(@RequestBody Cart newCart) throws CartConstraintViolationException, CartAlreadyExistsException {
+        Cart savedCart = cartService.createCart(newCart);
+        return new ResponseEntity<>(savedCart, HttpStatus.CREATED);
+
+    }
+
 
     @PutMapping(value = "/{cart_id}")
     public ResponseEntity<Cart> updateCart(@PathVariable(value = "cart_id") @Min(1) Integer id, @RequestBody Map<Product, Integer> productToQuantity)

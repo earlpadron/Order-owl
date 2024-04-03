@@ -7,6 +7,7 @@ import dev.earl.order_owl.model.converter.Status;
 import dev.earl.order_owl.model.embedded.Address;
 import dev.earl.order_owl.post.PostGeneratedService;
 import dev.earl.order_owl.repository.*;
+import dev.earl.order_owl.service.CartService;
 import dev.earl.order_owl.service.CustomerService;
 import dev.earl.order_owl.service.ProductService;
 import dev.earl.order_owl.service.ShipmentService;
@@ -41,7 +42,9 @@ public class OrderOwlApplication {
 											   OrderRepository orderRepository,
 											   ProductService productService,
 											   ShipmentRepository shipmentRepository,
-											   CartRepository cartRepository) {
+											   CartRepository cartRepository,
+											   CartService cartService)
+	{
 		return args -> {
 			productService.fillDbWithProducts();
 			Faker faker = new Faker();
@@ -79,34 +82,30 @@ public class OrderOwlApplication {
 						.build();
 				shipmentRepository.save(shipment);
 
-//				List<Shipment> shipmentList = new ArrayList<>();
-//				shipmentList.add(shipment);
-//
-//				customer.setShipmentList(shipmentList);
-//				customerRepository.save(customer);
-//				Random random = new Random();
-//				Map<Product, Integer> productToQuantity = new HashMap<>();
-//				for(int j = 0; j < 5; j++){
-//					Product product = productService.getProduct(random.nextInt(20) + 1);
-//					productToQuantity.put(product, random.nextInt(100) + 1);
-//				}
-//				int ranInt = random.nextInt(20) + 1;
-//				Customer customer = customerService.getCustomerEntity(ranInt);
+				customerRepository.save(customer);
+				Random random = new Random();
+				int ranInt = random.nextInt(20) + 1; //random number between 20 and 1
+
+				Map<Product, Integer> productToQuantity = new HashMap<>();
+				for(int j = 0; j < 5; j++){
+					Product product = productService.getProduct(ranInt);
+					productToQuantity.put(product, ranInt);
+				}
+
+				Cart newCart = new Cart(customer, productToQuantity, ranInt, ranInt);
 //				Cart cart = Cart.builder()
-//						//.customer(customerMapper.customerDTOToCustomer(customerService.getCustomer(1)))
-//						.customer(customerService.getCustomerEntity(ranInt))
+//						.cartId(i)
+//						.customer(customer)
 //						.numberOfItems(productToQuantity.size())
-//						.subtotal(random.nextInt(100) + 1)
+//						.subtotal(ranInt)
 //						.productToQuantity(productToQuantity)
 //						.build();
-//				cartRepository.save(cart);
-//
-//
+
+				customer.setCart(newCart);
+				cartService.createCart(newCart);
+
+
 		    }
-
-
-
-
 		};
 	}
 }
