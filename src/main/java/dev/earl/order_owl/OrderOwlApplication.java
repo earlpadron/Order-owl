@@ -84,25 +84,26 @@ public class OrderOwlApplication {
 
 				customerRepository.save(customer);
 				Random random = new Random();
-				int ranInt = random.nextInt(20) + 1; //random number between 20 and 1
+
 
 				Map<Product, Integer> productToQuantity = new HashMap<>();
 				for(int j = 0; j < 5; j++){
+					int ranInt = random.nextInt(20) + 1; //random number between 20 and 1
 					Product product = productService.getProduct(ranInt);
 					productToQuantity.put(product, ranInt);
 				}
 
-				Cart newCart = new Cart(customer, productToQuantity, ranInt, ranInt);
-//				Cart cart = Cart.builder()
-//						.cartId(i)
-//						.customer(customer)
-//						.numberOfItems(productToQuantity.size())
-//						.subtotal(ranInt)
-//						.productToQuantity(productToQuantity)
-//						.build();
+//				Cart newCart = new Cart(customer, productToQuantity, ranInt, ranInt);
+				Cart cart = Cart.builder()
+						.customer(customer)
+						.numberOfItems(productToQuantity.size())
+						.subtotal(random.nextDouble(100) + 1)
+						.productToQuantity(productToQuantity)
+						.build();
 
-				customer.setCart(newCart);
-				cartService.createCart(newCart);
+				customer.setCart(cart);
+				cartRepository.save(cart);
+				//cartService.createCart(cart);
 
 
 		    }

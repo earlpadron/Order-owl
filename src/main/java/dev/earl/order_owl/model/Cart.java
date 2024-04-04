@@ -1,6 +1,7 @@
 package dev.earl.order_owl.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
@@ -23,20 +24,21 @@ import java.util.Objects;
  * annotation. the cart can be identified from the customer field that is population from the customer association
  */
 @Entity
-@AllArgsConstructor
+@SuperBuilder
 public class Cart {
 
     @Id
+    @GeneratedValue
     private Integer cartId;
 
     @OneToOne
     @JoinColumn(name = "customer_id")
     @JsonBackReference
-    @MapsId //read about this further https://vladmihalcea.com/the-best-way-to-map-a-onetoone-relationship-with-jpa-and-hibernate/
+    //@MapsId //read about this further https://vladmihalcea.com/the-best-way-to-map-a-onetoone-relationship-with-jpa-and-hibernate/
     private Customer customer;
 
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.LAZY)
     /**
      *   Declare that a collection is mapped to a dedicated table,
      *   @ElementCollection is one of Hibernate's least-favorite features of JPA. Even the name of the annotation is bad.
@@ -45,7 +47,8 @@ public class Cart {
     @CollectionTable(name = "product_quantity", // table name
                      joinColumns = @JoinColumn(name ="cart_id")) // column holding foreign key of owner
     @Column(name = "quantity") //column holding map values
-    @MapKeyJoinColumn(name = "product_id", referencedColumnName = "productId")//@MapKeyJoinColumn specifies the column used to persist the keys of a map (used when the key is an entity)
+    @MapKeyJoinColumn(name = "product_id", referencedColumnName = "productId")
+    //@MapKeyJoinColumn specifies the column used to persist the keys of a map (used when the key is an entity)
     private Map<Product, Integer> productToQuantity;
 
     private double subtotal;

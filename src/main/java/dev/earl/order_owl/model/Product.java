@@ -24,11 +24,12 @@ public class Product {
     @NotEmpty
     private String category;
 
-
     private double price;
     @NotEmpty
     private String description;
     @NotEmpty
     private String image;
     private int stock;
+
+
 }
