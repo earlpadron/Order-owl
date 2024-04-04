@@ -33,4 +33,8 @@ public class LoggingAspect {
     public void logShipmentServiceException(RuntimeException exception){
         LOGGER.error(exception.getMessage(), exception);
     }
+    @AfterThrowing(pointcut = "execution(* dev.earl.order_owl.service.CartService.*(..))", throwing = "exception")
+    public void logCartServiceException(RuntimeException exception){
+        LOGGER.error(exception.getMessage(), exception);
+    }
 }
