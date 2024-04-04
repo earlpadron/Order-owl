@@ -45,10 +45,10 @@ public class CustomerService {
 
     }
 
-    public Customer getCustomerEntity(Integer id){
-        return repository.findById(id)
-                .orElseThrow(() -> new CustomerNotFoundException(environment.getProperty("service.customer.not.found")));
-    }
+//    public Customer getCustomerEntity(Integer id){
+//        return repository.findById(id)
+//                .orElseThrow(() -> new CustomerNotFoundException(environment.getProperty("service.customer.not.found")));
+//    }
 
     //getAllCustomers
     public List<CustomerDTO> getAllCustomers() throws CustomerListEmptyException {
