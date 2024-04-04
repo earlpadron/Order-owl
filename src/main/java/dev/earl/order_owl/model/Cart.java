@@ -51,8 +51,9 @@ public class Cart {
     //@MapKeyJoinColumn specifies the column used to persist the keys of a map (used when the key is an entity)
     private Map<Product, Integer> productToQuantity;
 
+    @Min(value = 0, message = "{cart.invalid.subtotal}")
     private double subtotal;
-    @Min(value = 0, message = "{cart.invalid.quantity}")
+    @Min(value = 0, message = "{cart.invalid.number.of.items}")
     private int numberOfItems;
 
     public Cart(){}

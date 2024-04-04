@@ -15,8 +15,9 @@ public class OrderDetail{
     @Id
     @GeneratedValue
     private Integer orderDetailId;
-    @Min(0)
+    @Min(value = 0, message = "{orderDetail.quantity.invalid}")
     private int quantity;
+    @Min(value = 0, message = "{orderDetail.priceEach.invalid}")
     private float priceEach;
 
     @ManyToOne

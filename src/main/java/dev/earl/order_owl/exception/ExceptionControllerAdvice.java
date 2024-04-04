@@ -1,9 +1,6 @@
 package dev.earl.order_owl.exception;
 
-import dev.earl.order_owl.exception.custom_exception.cart.CartAlreadyExistsException;
-import dev.earl.order_owl.exception.custom_exception.cart.CartConstraintViolationException;
-import dev.earl.order_owl.exception.custom_exception.cart.CartListEmptyException;
-import dev.earl.order_owl.exception.custom_exception.cart.CartNotFoundException;
+import dev.earl.order_owl.exception.custom_exception.cart.*;
 import dev.earl.order_owl.exception.custom_exception.customer.*;
 import dev.earl.order_owl.exception.custom_exception.order.*;
 import dev.earl.order_owl.exception.custom_exception.product.ProductAlreadyExistsException;
@@ -316,6 +313,15 @@ public class ExceptionControllerAdvice {
                 LocalDateTime.now()
         );
         return new ResponseEntity<>(errorInfo, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(CartInvalidQuantityException.class)
+    public ResponseEntity<ErrorInfo> cartInvalidQuantityExceptionHandler(CartInvalidQuantityException exception){ErrorInfo errorInfo = new ErrorInfo(
+            exception.getMessage(),
+            HttpStatus.BAD_REQUEST.value(),
+            LocalDateTime.now()
+    );
+        return new ResponseEntity<>(errorInfo, HttpStatus.BAD_REQUEST);
     }
 
 
