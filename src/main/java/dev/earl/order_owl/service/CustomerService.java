@@ -2,6 +2,7 @@ package dev.earl.order_owl.service;
 
 import dev.earl.order_owl.exception.custom_exception.customer.*;
 import dev.earl.order_owl.model.Customer;
+import dev.earl.order_owl.model.CustomerPaginationResponse;
 import dev.earl.order_owl.model.dto.CustomerDTO;
 import dev.earl.order_owl.repository.CustomerRepository;
 import dev.earl.order_owl.service.mapper.CustomerMapper;
@@ -9,6 +10,7 @@ import dev.earl.order_owl.service.validator.CustomerValidator;
 import jakarta.transaction.Transactional;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -47,17 +49,29 @@ public class CustomerService {
 
     }
 
-    public List<CustomerDTO> getAllCustomers(int pageNo, int pageSize) throws CustomerListEmptyException {
+    public CustomerPaginationResponse getAllCustomers(int pageNo, int pageSize) throws CustomerListEmptyException {
         Pageable pageable = PageRequest.of(pageNo, pageSize);
 
         //retrieve a page of posts
-        List<CustomerDTO> customerDTOList = repository.findAll(pageable).stream()
+        Page<Customer> customerPage = repository.findAll(pageable);
+
+        List<CustomerDTO> customerDTOList = customerPage.stream()
                 .map(mapper::customerToCustomerDTO)
                 .toList();
+
+        CustomerPaginationResponse customerPageResponse = CustomerPaginationResponse.builder()
+                .customers(customerDTOList)
+                .last(customerPage.isLast())
+                .pageNo(pageNo)
+                .pageSize(pageSize)
+                .totalElements(customerPage.getTotalElements())
+                .totalPages(customerPage.getTotalPages())
+                .build();
+
         if(customerDTOList.isEmpty()){
             throw new CustomerListEmptyException(environment.getProperty("service.customer.list.empty"));
         }
-        return customerDTOList;
+        return customerPageResponse;
     }
 
     //customize queries

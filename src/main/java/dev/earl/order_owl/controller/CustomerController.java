@@ -1,6 +1,7 @@
 package dev.earl.order_owl.controller;
 
 import dev.earl.order_owl.exception.custom_exception.customer.*;
+import dev.earl.order_owl.model.CustomerPaginationResponse;
 import dev.earl.order_owl.model.dto.CustomerDTO;
 import dev.earl.order_owl.service.CustomerService;
 import jakarta.validation.Valid;
@@ -39,12 +40,12 @@ public class CustomerController {
     }
 
     @GetMapping(value = "customers")
-    public ResponseEntity<List<CustomerDTO>> getAllCustomers(
+    public ResponseEntity<CustomerPaginationResponse> getAllCustomers(
             @RequestParam(value = "pageNo", required = false, defaultValue = "0") int pageNo,
             @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize
     ) throws CustomerListEmptyException {
-        List<CustomerDTO> customerDTOList = customerService.getAllCustomers(pageNo, pageSize);
-        return new ResponseEntity<>(customerDTOList, HttpStatus.OK);
+        CustomerPaginationResponse customerPageResponse = customerService.getAllCustomers(pageNo, pageSize);
+        return new ResponseEntity<>(customerPageResponse, HttpStatus.OK);
     }
 
     //create
