@@ -44,7 +44,7 @@ public class Customer {
     private List<Shipment> shipmentList;
 
     @OneToOne(mappedBy = "customer")
-    @JsonManagedReference
+    //@JsonManagedReference
     private Cart cart;
 
 

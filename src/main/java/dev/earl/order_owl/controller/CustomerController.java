@@ -39,8 +39,11 @@ public class CustomerController {
     }
 
     @GetMapping(value = "customers")
-    public ResponseEntity<List<CustomerDTO>> getAllCustomers() throws CustomerListEmptyException {
-        List<CustomerDTO> customerDTOList = customerService.getAllCustomers();
+    public ResponseEntity<List<CustomerDTO>> getAllCustomers(
+            @RequestParam(value = "pageNo", required = false, defaultValue = "0") int pageNo,
+            @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize
+    ) throws CustomerListEmptyException {
+        List<CustomerDTO> customerDTOList = customerService.getAllCustomers(pageNo, pageSize);
         return new ResponseEntity<>(customerDTOList, HttpStatus.OK);
     }
 

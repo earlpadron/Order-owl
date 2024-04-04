@@ -9,6 +9,8 @@ import dev.earl.order_owl.service.validator.CustomerValidator;
 import jakarta.transaction.Transactional;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -45,14 +47,11 @@ public class CustomerService {
 
     }
 
-//    public Customer getCustomerEntity(Integer id){
-//        return repository.findById(id)
-//                .orElseThrow(() -> new CustomerNotFoundException(environment.getProperty("service.customer.not.found")));
-//    }
+    public List<CustomerDTO> getAllCustomers(int pageNo, int pageSize) throws CustomerListEmptyException {
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
 
-    //getAllCustomers
-    public List<CustomerDTO> getAllCustomers() throws CustomerListEmptyException {
-        List<CustomerDTO> customerDTOList = repository.findAll().stream()
+        //retrieve a page of posts
+        List<CustomerDTO> customerDTOList = repository.findAll(pageable).stream()
                 .map(mapper::customerToCustomerDTO)
                 .toList();
         if(customerDTOList.isEmpty()){

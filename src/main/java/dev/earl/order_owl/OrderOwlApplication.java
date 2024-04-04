@@ -34,7 +34,7 @@ public class OrderOwlApplication {
 		SpringApplication.run(OrderOwlApplication.class, args);
 	}
 
-	@Bean
+
 	public CommandLineRunner commandLineRunner(CustomerRepository customerRepository,
 											   CustomerService customerService,
 											   CustomerMapper customerMapper,
@@ -48,7 +48,7 @@ public class OrderOwlApplication {
 		return args -> {
 			productService.fillDbWithProducts();
 			Faker faker = new Faker();
-			for (int i = 0; i < 20; i++) {
+			for (int i = 0; i < 100; i++) {
 				Address address = Address.builder()
 						.addressLine1(faker.address().streetAddress())
 						.addressLine2(faker.address().streetAddress())
@@ -93,7 +93,6 @@ public class OrderOwlApplication {
 					productToQuantity.put(product, ranInt);
 				}
 
-//				Cart newCart = new Cart(customer, productToQuantity, ranInt, ranInt);
 				Cart cart = Cart.builder()
 						.customer(customer)
 						.numberOfItems(productToQuantity.size())
@@ -103,7 +102,7 @@ public class OrderOwlApplication {
 
 				customer.setCart(cart);
 				cartRepository.save(cart);
-				//cartService.createCart(cart);
+
 
 
 		    }
