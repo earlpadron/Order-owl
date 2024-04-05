@@ -59,11 +59,13 @@ public class OrderOwlApplication {
 						.build();
 
 
+				String firstName = faker.name().firstName();
+				String lastName = faker.name().lastName();
 				Customer customer = Customer.builder()
 						.address(address)
-						.email(faker.name().firstName() + "@mail.com")
+						.email(firstName + lastName + "@mail.com")
 						.phone(faker.phoneNumber().cellPhone())
-						.name(faker.name().fullName())
+						.name(firstName + " " + lastName)
 						.build();
 				Customer savedCustomer = customerRepository.save(customer);
 

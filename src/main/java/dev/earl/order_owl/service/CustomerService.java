@@ -13,9 +13,11 @@ import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -59,7 +61,11 @@ public class CustomerService {
                 .map(mapper::customerToCustomerDTO)
                 .toList();
 
-        CustomerPaginationResponse customerPageResponse = CustomerPaginationResponse.builder()
+        if(customerDTOList.isEmpty()){
+            throw new CustomerListEmptyException(environment.getProperty("service.customer.list.empty"));
+        }
+
+        return CustomerPaginationResponse.builder()
                 .customers(customerDTOList)
                 .last(customerPage.isLast())
                 .pageNo(pageNo)
@@ -67,12 +73,31 @@ public class CustomerService {
                 .totalElements(customerPage.getTotalElements())
                 .totalPages(customerPage.getTotalPages())
                 .build();
-
-        if(customerDTOList.isEmpty()){
-            throw new CustomerListEmptyException(environment.getProperty("service.customer.list.empty"));
-        }
-        return customerPageResponse;
     }
+
+    public CustomerPaginationResponse getAllCustomerSortedByNameDescAndEmailAsc(int pageNo, int pageSize, String sortBy1, String sortBy2) throws CustomerListEmptyException{
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortBy1).descending().and(Sort.by(sortBy2).ascending()));
+
+        Page<Customer> customerPage = repository.findAll(pageable);
+
+        List<CustomerDTO> customerDTOS = customerPage.stream()
+                .map(mapper::customerToCustomerDTO)
+                .toList();
+
+        if(customerDTOS.isEmpty()){
+            throw new CustomerListEmptyException(environment.getProperty("{service.customer.list.empty}"));
+        }
+
+        return  CustomerPaginationResponse.builder()
+                .customers(customerDTOS)
+                .last(customerPage.isLast())
+                .pageNo(pageNo)
+                .pageSize(pageSize)
+                .totalElements(customerPage.getTotalElements())
+                .totalPages(customerPage.getTotalPages())
+                .build();
+    }
+
 
     //customize queries
 

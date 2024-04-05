@@ -48,7 +48,16 @@ public class CustomerController {
         return new ResponseEntity<>(customerPageResponse, HttpStatus.OK);
     }
 
-    //create
+   @GetMapping(value = "customers/sort")
+   public ResponseEntity<CustomerPaginationResponse> getAllCustomersSortedByNameEmail(
+           @RequestParam(value = "pageNo", required = true, defaultValue = "0") int pageNo,
+           @RequestParam(value = "pageSize", required = true, defaultValue = "5") int pageSize,
+           @RequestParam(value = "sortBy1", defaultValue = "email") String sortBy1,
+           @RequestParam(value = "sortBy2", defaultValue = "phone") String sortBy2
+   ) throws CustomerListEmptyException {
+        CustomerPaginationResponse customerPaginationResponse = customerService.getAllCustomerSortedByNameDescAndEmailAsc(pageNo, pageSize, sortBy1, sortBy2);
+        return new ResponseEntity<>(customerPaginationResponse, HttpStatus.OK);
+   }
 
     /**
      * NOTICE
