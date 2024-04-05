@@ -33,7 +33,7 @@ public class Cart {
 
     @OneToOne
     @JoinColumn(name = "customer_id")
-    //@JsonBackReference
+    @JsonBackReference
     //@MapsId //read about this further https://vladmihalcea.com/the-best-way-to-map-a-onetoone-relationship-with-jpa-and-hibernate/
     private Customer customer;
 
