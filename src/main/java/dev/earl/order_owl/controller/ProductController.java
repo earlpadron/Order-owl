@@ -2,6 +2,7 @@ package dev.earl.order_owl.controller;
 
 import dev.earl.order_owl.exception.custom_exception.product.ProductAlreadyExistsException;
 import dev.earl.order_owl.exception.custom_exception.product.ProductNotFoundException;
+import dev.earl.order_owl.model.PaginationResponse;
 import dev.earl.order_owl.model.Product;
 
 import dev.earl.order_owl.service.ProductService;
@@ -31,9 +32,13 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Product>> getAllProducts(){
-        List<Product> productList = productService.getAllProduct();
-        return new ResponseEntity<>(productList, HttpStatus.OK);
+    public ResponseEntity<PaginationResponse<Product>> getAllProducts(
+            @RequestParam(value = "pageNo" , defaultValue = "0") int pageNo,
+            @RequestParam(value = "pageSize", defaultValue =  "10") int pageSize,
+            @RequestParam(value = "sortBy", defaultValue = "productId") String sortBy
+    ){
+        PaginationResponse<Product> productPaginationResponse= productService.getAllProduct(pageNo, pageSize, sortBy);
+        return new ResponseEntity<>(productPaginationResponse, HttpStatus.OK);
     }
 
     @PostMapping

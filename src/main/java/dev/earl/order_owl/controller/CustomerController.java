@@ -1,17 +1,14 @@
 package dev.earl.order_owl.controller;
 
 import dev.earl.order_owl.exception.custom_exception.customer.*;
-import dev.earl.order_owl.model.CustomerPaginationResponse;
+import dev.earl.order_owl.model.PaginationResponse;
 import dev.earl.order_owl.model.dto.CustomerDTO;
 import dev.earl.order_owl.service.CustomerService;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping(value = "order_owl/v1/")
@@ -40,23 +37,23 @@ public class CustomerController {
     }
 
     @GetMapping(value = "customers")
-    public ResponseEntity<CustomerPaginationResponse> getAllCustomers(
+    public ResponseEntity<PaginationResponse<CustomerDTO>> getAllCustomers(
             @RequestParam(value = "pageNo", required = false, defaultValue = "0") int pageNo,
             @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize
     ) throws CustomerListEmptyException {
-        CustomerPaginationResponse customerPageResponse = customerService.getAllCustomers(pageNo, pageSize);
+        PaginationResponse<CustomerDTO> customerPageResponse = customerService.getAllCustomers(pageNo, pageSize);
         return new ResponseEntity<>(customerPageResponse, HttpStatus.OK);
     }
 
    @GetMapping(value = "customers/sort")
-   public ResponseEntity<CustomerPaginationResponse> getAllCustomersSortedByNameEmail(
+   public ResponseEntity<PaginationResponse<CustomerDTO>> getAllCustomersSortedByNameEmail(
            @RequestParam(value = "pageNo", required = true, defaultValue = "0") int pageNo,
            @RequestParam(value = "pageSize", required = true, defaultValue = "5") int pageSize,
            @RequestParam(value = "sortBy1", defaultValue = "email") String sortBy1,
            @RequestParam(value = "sortBy2", defaultValue = "phone") String sortBy2
    ) throws CustomerListEmptyException {
-        CustomerPaginationResponse customerPaginationResponse = customerService.getAllCustomerSortedByNameDescAndEmailAsc(pageNo, pageSize, sortBy1, sortBy2);
-        return new ResponseEntity<>(customerPaginationResponse, HttpStatus.OK);
+        PaginationResponse<CustomerDTO> paginationResponse = customerService.getAllCustomerSortedByNameDescAndEmailAsc(pageNo, pageSize, sortBy1, sortBy2);
+        return new ResponseEntity<>(paginationResponse, HttpStatus.OK);
    }
 
     /**

@@ -4,6 +4,7 @@ import dev.earl.order_owl.exception.custom_exception.product.ProductAlreadyExist
 import dev.earl.order_owl.exception.custom_exception.product.ProductConstraintViolationException;
 import dev.earl.order_owl.exception.custom_exception.product.ProductListEmptyException;
 import dev.earl.order_owl.exception.custom_exception.product.ProductNotFoundException;
+import dev.earl.order_owl.model.PaginationResponse;
 import dev.earl.order_owl.model.Product;
 import dev.earl.order_owl.model.ClientProduct;
 import dev.earl.order_owl.repository.ProductRepository;
@@ -13,6 +14,10 @@ import jakarta.validation.Validator;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.env.Environment;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
@@ -76,12 +81,21 @@ public class ProductService {
 
     }
 
-    public List<Product> getAllProduct() throws ProductListEmptyException {
-        List<Product> productList = productRepository.findAll();
+    public PaginationResponse<Product> getAllProduct(int pageNo, int pageSize, String sortBy) throws ProductListEmptyException {
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
+
+        Page<Product> productsPage = productRepository.findAll(pageable);
+
+        List<Product> productList= productsPage.stream()
+                .toList();
+
         if(productList.isEmpty()){
             throw new ProductListEmptyException(environment.getProperty("service.product.list.empty"));
         }
-        return productList;
+
+        return new PaginationResponse<>(productList, pageNo, pageSize,
+                productsPage.getTotalElements(), productsPage.getTotalPages(), productsPage.isLast());
+
     }
 
     public Product postProduct(Product newProduct) throws ProductAlreadyExistsException, ProductConstraintViolationException {

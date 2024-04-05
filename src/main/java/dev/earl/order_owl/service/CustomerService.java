@@ -2,7 +2,7 @@ package dev.earl.order_owl.service;
 
 import dev.earl.order_owl.exception.custom_exception.customer.*;
 import dev.earl.order_owl.model.Customer;
-import dev.earl.order_owl.model.CustomerPaginationResponse;
+import dev.earl.order_owl.model.PaginationResponse;
 import dev.earl.order_owl.model.dto.CustomerDTO;
 import dev.earl.order_owl.repository.CustomerRepository;
 import dev.earl.order_owl.service.mapper.CustomerMapper;
@@ -17,7 +17,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -51,31 +50,27 @@ public class CustomerService {
 
     }
 
-    public CustomerPaginationResponse getAllCustomers(int pageNo, int pageSize) throws CustomerListEmptyException {
+    public PaginationResponse<CustomerDTO> getAllCustomers(int pageNo, int pageSize) throws CustomerListEmptyException {
         Pageable pageable = PageRequest.of(pageNo, pageSize);
 
         //retrieve a page of posts
         Page<Customer> customerPage = repository.findAll(pageable);
 
-        List<CustomerDTO> customerDTOList = customerPage.stream()
+        List<CustomerDTO> customerDTOS = customerPage.stream()
                 .map(mapper::customerToCustomerDTO)
                 .toList();
 
-        if(customerDTOList.isEmpty()){
+        if(customerDTOS.isEmpty()){
             throw new CustomerListEmptyException(environment.getProperty("service.customer.list.empty"));
         }
 
-        return CustomerPaginationResponse.builder()
-                .customers(customerDTOList)
-                .last(customerPage.isLast())
-                .pageNo(pageNo)
-                .pageSize(pageSize)
-                .totalElements(customerPage.getTotalElements())
-                .totalPages(customerPage.getTotalPages())
-                .build();
+        return new PaginationResponse<>(
+                customerDTOS, pageNo, pageSize, customerPage.getTotalElements(),
+                customerPage.getTotalPages(), customerPage.isLast());
+
     }
 
-    public CustomerPaginationResponse getAllCustomerSortedByNameDescAndEmailAsc(int pageNo, int pageSize, String sortBy1, String sortBy2) throws CustomerListEmptyException{
+    public PaginationResponse<CustomerDTO> getAllCustomerSortedByNameDescAndEmailAsc(int pageNo, int pageSize, String sortBy1, String sortBy2) throws CustomerListEmptyException{
         Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortBy1).descending().and(Sort.by(sortBy2).ascending()));
 
         Page<Customer> customerPage = repository.findAll(pageable);
@@ -88,14 +83,9 @@ public class CustomerService {
             throw new CustomerListEmptyException(environment.getProperty("{service.customer.list.empty}"));
         }
 
-        return  CustomerPaginationResponse.builder()
-                .customers(customerDTOS)
-                .last(customerPage.isLast())
-                .pageNo(pageNo)
-                .pageSize(pageSize)
-                .totalElements(customerPage.getTotalElements())
-                .totalPages(customerPage.getTotalPages())
-                .build();
+        return new PaginationResponse<>(
+                customerDTOS, pageNo, pageSize, customerPage.getTotalElements(),
+                customerPage.getTotalPages(), customerPage.isLast());
     }
 
 

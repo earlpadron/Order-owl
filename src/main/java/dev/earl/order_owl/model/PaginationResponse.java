@@ -12,9 +12,9 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
-public class CustomerPaginationResponse {
+public class PaginationResponse<T> {
 
-    private List<CustomerDTO> customers;
+    private List<T> content;
     private int pageNo;
     private int pageSize;
     private long totalElements;
