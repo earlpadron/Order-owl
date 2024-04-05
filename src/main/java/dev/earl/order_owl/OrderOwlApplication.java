@@ -34,7 +34,7 @@ public class OrderOwlApplication {
 		SpringApplication.run(OrderOwlApplication.class, args);
 	}
 
-
+	@Bean
 	public CommandLineRunner commandLineRunner(CustomerRepository customerRepository,
 											   CustomerService customerService,
 											   CustomerMapper customerMapper,

@@ -121,6 +121,8 @@ public class CustomerService {
             customerToBeUpdated.setName(updateCustomerDTO.name());
             customerToBeUpdated.setAddress(updateCustomerDTO.address());
             customerToBeUpdated.setPhone(updateCustomerDTO.phone());
+            customerToBeUpdated.setShipmentList(updateCustomerDTO.shipments());
+            customerToBeUpdated.setCart(updateCustomerDTO.cart());
             repository.save(customerToBeUpdated);
 
         return mapper.customerToCustomerDTO(customerToBeUpdated);

@@ -1,8 +1,10 @@
 package dev.earl.order_owl.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import dev.earl.order_owl.model.Cart;
 import dev.earl.order_owl.model.Shipment;
 import dev.earl.order_owl.model.embedded.Address;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 
@@ -16,6 +18,12 @@ public record CustomerDTO(
     @Email
     String email,
     String phone,
-    Address address
+    Address address,
+    @Valid
+    Cart cart,
+    @Valid
+    List<Shipment> shipments
+
+
 ) {
 }
