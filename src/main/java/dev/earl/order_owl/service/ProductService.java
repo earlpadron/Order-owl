@@ -7,6 +7,7 @@ import dev.earl.order_owl.exception.custom_exception.product.ProductNotFoundExce
 import dev.earl.order_owl.model.PaginationResponse;
 import dev.earl.order_owl.model.Product;
 import dev.earl.order_owl.model.ClientProduct;
+import dev.earl.order_owl.model.dto.CustomerDTO;
 import dev.earl.order_owl.repository.ProductRepository;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ConstraintViolation;
@@ -93,8 +94,14 @@ public class ProductService {
             throw new ProductListEmptyException(environment.getProperty("service.product.list.empty"));
         }
 
-        return new PaginationResponse<>(productList, pageNo, pageSize,
-                productsPage.getTotalElements(), productsPage.getTotalPages(), productsPage.isLast());
+        return PaginationResponse.<Product>builder()
+                .content(productList)
+                .pageNo(pageNo)
+                .pageSize(pageSize)
+                .totalElements(productsPage.getTotalElements())
+                .totalPages(productsPage.getTotalPages())
+                .last(productsPage.isLast())
+                .build();
 
     }
 

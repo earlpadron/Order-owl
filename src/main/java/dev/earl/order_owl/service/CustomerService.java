@@ -64,9 +64,14 @@ public class CustomerService {
             throw new CustomerListEmptyException(environment.getProperty("service.customer.list.empty"));
         }
 
-        return new PaginationResponse<>(
-                customerDTOS, pageNo, pageSize, customerPage.getTotalElements(),
-                customerPage.getTotalPages(), customerPage.isLast());
+        return PaginationResponse.<CustomerDTO>builder()
+                .content(customerDTOS)
+                .pageNo(pageNo)
+                .pageSize(pageSize)
+                .totalElements(customerPage.getTotalElements())
+                .totalPages(customerPage.getTotalPages())
+                .last(customerPage.isLast())
+                .build();
 
     }
 
@@ -83,9 +88,14 @@ public class CustomerService {
             throw new CustomerListEmptyException(environment.getProperty("{service.customer.list.empty}"));
         }
 
-        return new PaginationResponse<>(
-                customerDTOS, pageNo, pageSize, customerPage.getTotalElements(),
-                customerPage.getTotalPages(), customerPage.isLast());
+        return PaginationResponse.<CustomerDTO>builder()
+                .content(customerDTOS)
+                .pageNo(pageNo)
+                .pageSize(pageSize)
+                .totalElements(customerPage.getTotalElements())
+                .totalPages(customerPage.getTotalPages())
+                .last(customerPage.isLast())
+                .build();
     }
 
 
